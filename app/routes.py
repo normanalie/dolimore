@@ -1,6 +1,7 @@
-from flask import render_template
+from flask import redirect, render_template
 
 from app import app
+from app.forms import LoginForm
 
 
 @app.route('/')
@@ -15,6 +16,9 @@ def base():
 def mailing():
     return render_template('mailing.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+    if form.validate_on_submit():
+        return redirect('/')
+    return render_template('login.html', form=form)

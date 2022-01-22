@@ -5,5 +5,22 @@
 {% block content %}
 <div class="content">
     <h1>Se connecter</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}
+            {{ form.username(size=64) }}
+        </p>
+        <p>
+            {{ form.password.label }}
+            {{ form.password(size=64) }}
+        </p>
+        <p>
+            {{ form.remember_me() }} {{ form.remember_me.label }}
+        </p>
+        <p>
+            {{ form.submit() }}
+        </p>
+    </form>
 </div>
 {% endblock %}
