@@ -18,3 +18,5 @@ _mailinglist
 .idea/
 docs/_build/
 .vscode
+*.secret
+__pycache__
