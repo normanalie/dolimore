@@ -1,5 +1,5 @@
 from flask import redirect, render_template, url_for
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 
 from app import app
 from app.forms import LoginForm
@@ -11,13 +11,16 @@ from app.models import User
 def index():
     return render_template('index.html')
 
+
 @app.route('/contract')
 def base():
     return render_template('contract.html')
 
+
 @app.route('/mailing')
 def mailing():
     return render_template('mailing.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -36,3 +39,9 @@ def login():
             login_user(user, remember=form.remember_me.data)
             return redirect(url_for('index'))
     return render_template('login.html', form=form, errors=errors)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
