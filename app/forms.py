@@ -4,7 +4,7 @@ from wtforms import (
     StringField, TextAreaField, 
     IntegerField, FloatField,
     EmailField, TelField, 
-    DateTimeField, 
+    DateField, 
     PasswordField, 
     BooleanField, 
     SubmitField, 
@@ -34,7 +34,7 @@ class ContractForm(FlaskForm):
     representative_role = StringField("Qualité du représentant", validators=[DataRequired(), Length(1, 60, "Le texte est trop long")])
 
     show_name = StringField("Nom", validators=[DataRequired(), Length(-1, 60, "Le nom est trop long")])
-    show_date = DateTimeField("Date", validators=[DataRequired()])
+    show_date = DateField("Date", validators=[DataRequired()])
     show_conditions = TextAreaField("Conditions d'accueil", validators=[Length(-1, 500, "Doit faire moins de 500 caractères")])
     show_contact = StringField("Contact technique", validators=[DataRequired(), Length(-1, 120, "Le contact est trop long")])
 
