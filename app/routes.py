@@ -14,3 +14,7 @@ def base():
 @app.route('/mailing')
 def mailing():
     return render_template('mailing.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
