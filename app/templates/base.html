@@ -9,6 +9,18 @@
     </title>
 </head>
 <body>
+    <div class="nav">
+        <p>
+            <a href="{{ url_for('index') }}">Accueil</a>&nbsp;|&nbsp;
+            <a href="{{ url_for('mailing') }}">Mailing</a>&nbsp;|&nbsp;
+            <a href="{{ url_for('contract') }}">Mailing</a>&nbsp;|&nbsp;
+            {% if current_user.is_anonymous %}
+                <a href="{{ url_for('login') }}">Se connecter</a>
+            {% else %}
+                {{ current_user.email }} <a href="{{ url_for('logout') }}">Deconnexion</a>
+            {% endif %}
+        </p>
+    </div>
     {% block content %}
     <p>Hello World</p>
     {% endblock %}
