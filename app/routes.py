@@ -7,6 +7,7 @@ from app.models import User
 
 
 @app.route('/')
+@app.route('/index')
 def index():
     return render_template('index.html')
 
@@ -22,7 +23,7 @@ def mailing():
 def login():
     errors = []
     if current_user.is_authenticated:
-        return redirect(url_for(''))
+        return redirect(url_for('index'))
 
     form = LoginForm()
     if form.validate_on_submit():  # POST processing
@@ -33,5 +34,5 @@ def login():
             errors.append("Mot de passe incorrect")
         else:
             login_user(user, remember=form.remember_me.data)
-            return redirect(url_for(''))
+            return redirect(url_for('index'))
     return render_template('login.html', form=form, errors=errors)
