@@ -1,5 +1,6 @@
-from flask import redirect, render_template, url_for
-from flask_login import current_user, login_user, logout_user
+from flask import redirect, render_template, request, url_for
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.urls import url_parse
 
 from app import app
 from app.forms import LoginForm
@@ -13,11 +14,13 @@ def index():
 
 
 @app.route('/contract')
+@login_required
 def contract():
     return render_template('contract.html')
 
 
 @app.route('/mailing')
+@login_required
 def mailing():
     return render_template('mailing.html')
 
@@ -37,7 +40,10 @@ def login():
             errors.append("Mot de passe incorrect")
         else:
             login_user(user, remember=form.remember_me.data)
-            return redirect(url_for('index'))
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != '':  # Check if there is a next_page and if the next_page is a relative path
+                next_page = url_for('index')
+            return redirect(next_page)
     return render_template('login.html', form=form, errors=errors)
 
 
