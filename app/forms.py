@@ -1,7 +1,14 @@
 from flask_wtf import FlaskForm
-from sqlalchemy import Integer
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField, IntegerField, TelField, DateTimeField, TextAreaField, FloatField
 from wtforms.validators import DataRequired, Length, Regexp, Email
+from wtforms import (
+    StringField, TextAreaField, 
+    IntegerField, FloatField,
+    EmailField, TelField, 
+    DateTimeField, 
+    PasswordField, 
+    BooleanField, 
+    SubmitField, 
+    )
 
 class LoginForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired()])
@@ -32,3 +39,5 @@ class ContractForm(FlaskForm):
     show_contact = StringField("Contact technique", validators=[DataRequired(), Length(-1, 120, "Le contact est trop long")])
 
     price_exclVAT = FloatField("Montant HT", validators=[DataRequired(), Length(-1, 60, "Le montant est trop long")])
+
+    submit = SubmitField("Générer")
