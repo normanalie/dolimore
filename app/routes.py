@@ -1,4 +1,4 @@
-from flask import redirect, render_template
+from flask import redirect, render_template, url_for
 
 from app import app
 from app.forms import LoginForm
@@ -20,5 +20,5 @@ def mailing():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        return redirect('/')
+        return redirect(url_for('/'))
     return render_template('login.html', form=form)
