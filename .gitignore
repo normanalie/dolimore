@@ -21,3 +21,4 @@ docs/_build/
 *.secret
 __pycache__
 *.db
+app/app.db
