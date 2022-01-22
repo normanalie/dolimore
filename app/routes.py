@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app import app
-from app.forms import LoginForm
+from app.forms import LoginForm, ContractForm
 from app.models import User
 
 
@@ -13,10 +13,12 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/contract')
+@app.route('/contract', methods=['GET', 'POST'])
 @login_required
 def contract():
-    return render_template('contract.html')
+    form = ContractForm()
+    tiers = ["mairie saint-denis", "salle des fetes"]
+    return render_template('contract.html', form=form, tiers=tiers)
 
 
 @app.route('/mailing')

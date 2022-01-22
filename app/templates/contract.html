@@ -5,5 +5,40 @@
 {% block content %}
 <div class="content">
     <h1>Contrat de cession</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            N° Objet: {{ form.object_number() }} - N° Devis: {{ form.quote_number() }}
+        </p>
+
+        <p>
+            Le Producteur: 
+            <select id="tiers">
+                <option value="none"></option>
+                {% for tier in tiers %}
+                <option value="{{ tier }}">{{ tier }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            {{ form.producer_name.label }}: {{ form.producer_name }} <br>
+            {{ form.producer_address.label }}: {{ form.producer_address }} <br>
+            {{ form.producer_zip.label }}: {{ form.producer_zip }} <br>
+            {{ form.producer_tel.label }}: {{ form.producer_tel }} &nbsp; {{ form.producer_email.label }}: {{ form.producer_email }} <br>
+            {{ form.producer_siret.label }}: {{ form.producer_siret }} &nbsp; {{ form.producer_licence.label }}: {{ form.producer_licence }} <br>
+            {{ form.producer_ape.label }}: {{ form.producer_ape }} &nbsp; {{ form.producer_tva.label }}: {{ form.producer_tva }} <br>
+            Représenté par {{ form.producer_representative }} en qualité de {{ form.representative_role }} <br>
+        </p>
+
+        <p>
+            Le Spectacle:
+            <br>
+            {{ form.show_name.label }}: {{ form.show_name }} &nbsp; {{ form.show_date.label }}: {{ form.show_date }} <br>
+            {{ form.show_conditions.label }}: {{ form.show_conditions }} <br>
+            {{ form.show_contact.label }}: {{ form.show_contact }} <br>
+            <br>
+            {{ form.price_exclVAT.label }}: {{ form.price_exclVAT }} &nbsp; TVA: 5,5% &nbsp; TTC: <input type="number" name="TTC" id="TTC" disabled value="0123"> <br>
+        </p>
+        {{ form.submit }}
+    </form>
 </div>
 {% endblock %}
