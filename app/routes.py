@@ -13,7 +13,7 @@ def index():
 
 
 @app.route('/contract')
-def base():
+def contract():
     return render_template('contract.html')
 
 
