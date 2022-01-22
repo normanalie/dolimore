@@ -1,7 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
-from app import db
+from app import db, login
 
 
 class User(UserMixin, db.Model):
@@ -18,3 +18,8 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return f'<User: {self.username}>'
+
+
+@login.user_loader  # Give the user object to flask-login based on the id
+def user_loader(id):
+    return User.query.get(int(id))  # user_loader give a id:string, db need id:int
