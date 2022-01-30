@@ -14,32 +14,27 @@ class Dolibarr:
         return 0
 
     @classmethod
-    def categories(cls) -> list():
+    def categories(cls, types: list()) -> list():
         """
-        Take nothing and return a list of tuple of all the categories associated with Contacts and Thirdparties
+        Take the type ["contact", "customer"] and return a list of tuple of all the categories associated with Contacts and/or Customer (Thirdparties)
         Output:
             [(id, label),
              (id, label),
              ...
             ]
         """
-        r = requests.get(f"{cls.base_url}/htdocs/api/index.php/categories?sortfield=t.rowid&sortorder=ASC&type=contact", headers=cls.header)
-        categories_contact_id = extract_propertie(r.json(), "id")
-        categories_contact_label = extract_propertie(r.json(), "label")
-        categories_contact = []
-        for id, label in zip(categories_contact_id, categories_contact_label):
-            categories_contact.append((id, label))
+        list = []
+        for type in types:
+            r = requests.get(f"{cls.base_url}/htdocs/api/index.php/categories?sortfield=t.rowid&sortorder=ASC&type=contact", headers=cls.header)
+            categories_id = extract_propertie(r.json(), "id")
+            categories_label = extract_propertie(r.json(), "label")
+            categories = []
+            for id, label in zip(categories_id, categories_label):
+                categories.append((id, label))
+            list.append(categories)
 
-        r = requests.get(f"{cls.base_url}/htdocs/api/index.php/categories?sortfield=t.rowid&sortorder=ASC&type=customer", headers=cls.header)
-        categories_customer_id = extract_propertie(r.json(), "id")
-        categories_customer_label = extract_propertie(r.json(), "label")
-        categories_customer = []
-        for id, label in zip(categories_customer_id, categories_customer_label):
-            categories_customer.append((id, label))
-
-        categories = union([categories_contact, categories_customer])
-
-        return categories
+        list = union(list)
+        return list
 
     @classmethod
     def emails(cls, types: list(), categories: list(), operator: str()) -> list():
