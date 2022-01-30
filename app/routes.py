@@ -3,9 +3,13 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app import app
-from app.forms import LoginForm, ContractForm
+from app.forms import LoginForm, ContractForm, MailingForm
 from app.models import User
 
+from .dolibarr import Dolibarr
+from . import dolibarr_config
+
+Dolibarr.config(dolibarr_config.API_KEY, dolibarr_config.BASE_URL)
 
 @app.route('/')
 @app.route('/index')
@@ -21,10 +25,28 @@ def contract():
     return render_template('contract.html', form=form, tiers=tiers)
 
 
-@app.route('/mailing')
+@app.route('/mailing', methods=["GET", "POST"])
 @login_required
 def mailing():
-    return render_template('mailing.html')
+    form = MailingForm()
+    emails = []
+
+    categories_contact = Dolibarr.categories(types=["contact"])
+    form.categories_contact.choices = categories_contact
+    categories_customer = Dolibarr.categories(types=["customer"])
+    form.categories_customer.choices = categories_customer
+
+    if form.validate_on_submit():
+        cat_id_contact = form.categories_contact.data
+        cat_operator_contact = form.operator_contact.data
+        cat_id_customer = form.categories_customer.data
+        cat_operator_customer = form.operator_customer.data
+        emails_contact = Dolibarr.emails(["contact"], cat_id_contact, cat_operator_contact)
+        emails_customer = Dolibarr.emails(["customer"], cat_id_customer, cat_operator_customer)
+        emails.extend(emails_contact)
+        emails.extend(emails_customer)
+
+    return render_template('mailing.html', form=form, emails=emails)
 
 
 @app.route('/login', methods=['GET', 'POST'])
