@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length, Regexp, Email
 from wtforms import (
     StringField, TextAreaField, 
-    SelectField, RadioField,
+    SelectField, RadioField, SelectMultipleField,
     IntegerField, FloatField,
     EmailField, TelField, 
     DateField, 
@@ -18,8 +18,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Se connecter")
 
 class MailingForm(FlaskForm):
-    categories_customer = SelectField("Catégories Tiers", coerce=int)
-    categories_contact = SelectField("Catégories Contact", coerce=int)
+    categories_customer = SelectMultipleField("Catégories Tiers")
+    categories_contact = SelectMultipleField("Catégories Contact")
     operator_customer = RadioField("Filtre Tiers", choices=[("and", "ET"), ("or", "OU")])
     operator_contact = RadioField("Filtre Contact", choices=[("and", "ET"), ("or", "OU")])
     submit = SubmitField("Ajouter")
