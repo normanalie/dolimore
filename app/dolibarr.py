@@ -78,7 +78,9 @@ def get_all_emails(base_url, header, types: list(), categories: list()):
     for type in types:
         for categorie in categories:
             r = requests.get(f"{base_url}/htdocs/api/index.php/categories/{categorie}/objects?type={type}", headers=header)
-            emails.append(extract_propertie(r.json(), "mail"))
+            email = extract_propertie(r.json(), "mail")
+            if email:  # Email is not required in dolibarr, don't add email to the list if email is empty
+                emails.append(email)
     return emails
 
 
