@@ -100,8 +100,14 @@ def intersection(lst: list()) -> list():
     """
     Take a list of lists and return the intersection (common elements in each lists)
     [["a", "b", "c"], ["c", "d", "e"]] -> ["c"]
+
+    Something INTER Nothing = Something
+    [["a", "b", "c"], []] -> ["a", "b", "c"]
     """
-    intersection = []
+    try: # [["a", "b", "c"], []] -> ["a", "b", "c"]
+        intersection = lst[0]
+    except IndexError:
+        intersection = []
 
     precedent_list = None
     for lists in lst:
