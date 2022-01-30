@@ -22,3 +22,4 @@ docs/_build/
 __pycache__
 *.db
 app/app.db
+dolibarr_config.py
