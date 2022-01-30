@@ -1,3 +1,4 @@
+from email.policy import default
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length, Regexp, Email
 from wtforms import (
@@ -20,8 +21,8 @@ class LoginForm(FlaskForm):
 class MailingForm(FlaskForm):
     categories_customer = SelectMultipleField("Catégories Tiers")
     categories_contact = SelectMultipleField("Catégories Contact")
-    operator_customer = RadioField("Filtre Tiers", choices=[("and", "ET"), ("or", "OU")])
-    operator_contact = RadioField("Filtre Contact", choices=[("and", "ET"), ("or", "OU")])
+    operator_customer = RadioField("Filtre Tiers", choices=[("and", "ET"), ("or", "OU")], default='and')
+    operator_contact = RadioField("Filtre Contact", choices=[("and", "ET"), ("or", "OU")], default='and')
     submit = SubmitField("Ajouter")
 
 class ContractForm(FlaskForm):
