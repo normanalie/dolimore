@@ -69,7 +69,8 @@ def extract_propertie(objects: list(), propertie: str()) -> list():
     """
     list = []
     for object in objects:
-        list.append(object[propertie])
+        if object[propertie] and object[propertie] != "None":
+            list.append(object[propertie])
     return list
 
 
@@ -78,9 +79,7 @@ def get_all_emails(base_url, header, types: list(), categories: list()):
     for type in types:
         for categorie in categories:
             r = requests.get(f"{base_url}/htdocs/api/index.php/categories/{categorie}/objects?type={type}", headers=header)
-            email = extract_propertie(r.json(), "mail")
-            if email:  # Email is not required in dolibarr, don't add email to the list if email is empty
-                emails.append(email)
+            emails.append(extract_propertie(r.json(), "email"))
     return emails
 
 
