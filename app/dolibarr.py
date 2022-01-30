@@ -25,7 +25,7 @@ class Dolibarr:
         """
         list = []
         for type in types:
-            r = requests.get(f"{cls.base_url}/htdocs/api/index.php/categories?sortfield=t.rowid&sortorder=ASC&type=contact", headers=cls.header)
+            r = requests.get(f"{cls.base_url}/htdocs/api/index.php/categories?sortfield=t.rowid&sortorder=ASC&type={type}", headers=cls.header)
             categories_id = extract_propertie(r.json(), "id")
             categories_label = extract_propertie(r.json(), "label")
             categories = []
