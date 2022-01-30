@@ -52,6 +52,34 @@ class Dolibarr:
             emails = union(emails)
         return emails
 
+    @classmethod
+    def customer_contacts_from_cat(cls, categories: list(), operator: str()) -> list():
+        """
+        Take a list of customer categories and the operator to filter the categories (and/or).
+        Return the contact emails associated with.
+        """
+        customer_ids = []
+        emails = []
+        for categorie in categories:
+            r = requests.get(f"{cls.base_url}/htdocs/api/index.php/categories/{categorie}/objects?type=customer", headers=cls.header)
+            id = extract_propertie(r.json(), "id")
+            customer_ids.append(id)
+
+        if operator == "and":
+            customer_ids = intersection(customer_ids)
+        else:
+            customer_ids = union(customer_ids)
+        
+        customer_ids = ','.join(customer_ids)  # Dolibarr API can take a comma-separated list of ids to reduce API calls 
+        r = requests.get(f"{cls.base_url}/htdocs/api/index.php/contacts?thirdparty_ids={customer_ids}", headers=cls.header)
+        emails.extend(extract_propertie(r.json(), "email"))
+
+        emails = delete_duplicates(emails)
+        return emails
+
+    
+
+
 def header(api_key):
     return {"DOLAPIKEY": api_key}
 

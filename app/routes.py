@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, session, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
@@ -29,12 +29,17 @@ def contract():
 @login_required
 def mailing():
     form = MailingForm()
-    emails = []
+    if "mailing_emails" in session:
+        emails = session["mailing_emails"]
+    else:
+        emails = []
 
     categories_contact = Dolibarr.categories(types=["contact"])
     form.categories_contact.choices = categories_contact
+    form.categories_contact.data = ""  # default value at each reload 
     categories_customer = Dolibarr.categories(types=["customer"])
     form.categories_customer.choices = categories_customer
+    form.categories_customer.data = ""
 
     if form.validate_on_submit():
         cat_id_contact = form.categories_contact.data
@@ -45,7 +50,11 @@ def mailing():
         emails_customer = Dolibarr.emails(["customer"], cat_id_customer, cat_operator_customer)
         emails.extend(emails_contact)
         emails.extend(emails_customer)
+        if form.add_customer_contacts.data:
+            emails_customer_contacts = Dolibarr.customer_contacts_from_cat(cat_id_customer, cat_operator_customer)
+            emails.extend(emails_customer_contacts)
 
+    session["mailing_emails"] = emails
     return render_template('mailing.html', form=form, emails=emails)
 
 

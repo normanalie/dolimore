@@ -23,6 +23,7 @@ class MailingForm(FlaskForm):
     categories_contact = SelectMultipleField("Catégories Contact")
     operator_customer = RadioField("Filtre Tiers", choices=[("and", "ET"), ("or", "OU")], default='and')
     operator_contact = RadioField("Filtre Contact", choices=[("and", "ET"), ("or", "OU")], default='and')
+    add_customer_contacts = BooleanField("Ajouter les contacts des tiers ?")
     submit = SubmitField("Ajouter")
 
 class ContractForm(FlaskForm):
