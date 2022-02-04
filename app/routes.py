@@ -80,6 +80,7 @@ def mailing_export():
         # Generate path
         basedir = app.config["EXPORT_FOLDER"]
         ts = datetime.timestamp(datetime.now())
+        ts = str(ts).split('.')[0]  # Remove miliseconds from timestamp
         username = current_user.username
         filename = f'mailing-{username}-{ts}.csv'
         path = Export.path([basedir, filename])
