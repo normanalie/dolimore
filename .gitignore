@@ -23,3 +23,4 @@ __pycache__
 *.db
 app/app.db
 dolibarr_config.py
+app/static/files

@@ -16,6 +16,9 @@ DEBUG = True
 DEVELOPMENT = True
 SECRET_KEY = '247MKgKxgc'
 
+UPLOAD_FOLDER = "static/files/upload"
+EXPORT_FOLDER = "static/files/export"
+
 SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
 SQLALCHEMY_TRACK_MODIFICATIONS = False

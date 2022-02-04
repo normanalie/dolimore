@@ -1,4 +1,6 @@
-from flask import redirect, render_template, request, session, url_for
+from datetime import datetime
+
+from flask import redirect, render_template, request, send_from_directory, session, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
@@ -8,6 +10,8 @@ from app.models import User
 
 from .dolibarr import Dolibarr
 from . import dolibarr_config
+
+from .export import Export
 
 Dolibarr.config(dolibarr_config.API_KEY, dolibarr_config.BASE_URL)
 
@@ -67,6 +71,26 @@ def mailing():
 def mailing_export():
      if "mailing_emails" in session:  # List of precedent emails selection
         emails = session["mailing_emails"]
+
+        # Extract emails
+        full_emails = []  # A single list of all the emails
+        for sublist in emails:
+            for email in sublist:
+                if email not in full_emails:
+                    full_emails.append(email)
+
+        # Generate path
+        basedir = app.config["EXPORT_FOLDER"]
+        ts = datetime.timestamp(datetime.now())
+        username = current_user.username
+        filename = f'mailing-{username}-{ts}.csv'
+        path = Export.path([basedir, filename])
+
+        # Generate file
+        Export.csv(full_emails, path)
+        return send_from_directory(directory=basedir, path=filename)
+
+
 
 
 
