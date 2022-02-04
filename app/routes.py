@@ -59,9 +59,7 @@ def mailing():
     form.categories_contact.data = ""  # Empty default value at each reload 
     form.categories_customer.data = ""
 
-    print(f'EMIALS BEFORE: {emails}')
     emails = Dolibarr.delete_duplicates(emails)
-    print(f'EMIALS AFTER: {emails}')
     session["mailing_emails"] = emails  # Update session var
     return render_template('mailing.html', form=form, emails=emails)
 

@@ -89,8 +89,6 @@ class Dolibarr:
             seen_items = []
             for ls in lst[:]: # Iterate over a copy because we remove item so the lenght of the list decrease -> if we remove in the original, some items will be skip
                 for elem in ls[:]:  
-                    print(elem)
-                    print(elem in seen_items)
                     if elem in seen_items:
                         ls.remove(elem)
                     else:
