@@ -3,31 +3,37 @@
 {% block title %}Connexion - Dolimore{% endblock %}
 
 {% block content %}
-<div class="content">
-    <h1>Se connecter</h1>
-    <form action="" method="post">
+<div class="container-fluid mt-5 ">
+    <div class="col text-center">
+        <h1>Se Connecter</h1>
+    </div>
+
+    <form action="" method="post" class="form-signin">
         {{ form.hidden_tag() }}
+
         {% if errors %}
-        <ul class="error_msg">
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
+        <div class="form-group alert alert-danger">
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
         {% endif %}
-        <p>
-            {{ form.email.label }}
-            {{ form.email(size=64) }}
-        </p>
-        <p>
-            {{ form.password.label }}
-            {{ form.password(size=64) }}
-        </p>
-        <p>
+
+        {{ form.email.label(class="visually-hidden") }}
+        {{ form.email(size=64, class="form-control", placeholder="Adresse mail", autofocus='') }}
+
+        {{ form.password.label(class="visually-hidden") }}
+        {{ form.password(size=64, class="form-control", placeholder="Mot de passe") }}
+
+        <div class="form-group my-3">
             {{ form.remember_me() }} {{ form.remember_me.label }}
-        </p>
-        <p>
-            {{ form.submit() }}
-        </p>
+        </div>
+
+        <div class="d-grid">
+            {{ form.submit(class="btn btn-lg btn-primary") }}
+        </div>
     </form>
 </div>
 {% endblock %}
