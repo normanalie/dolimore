@@ -27,17 +27,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('mailing') }}">Mailing</a>
                 </li>
-                {% if current_user.is_anonymous %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}">Se connecter</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}">Se déconnecter</a>
-                </li>
-                <span class="navbar-text">{{ current_user.email }}</span>
-                {% endif %}
               </ul>
+            </div>
+            <div class="d-flex">
+                <ul class="navbar-nav mr-auto">
+                    {% if current_user.is_anonymous %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Se connecter</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Se déconnecter</a>
+                    </li>
+                    <span class="navbar-text">{{ current_user.email }}</span>
+                    {% endif %}
+                </ul>
             </div>
         </nav>
     
