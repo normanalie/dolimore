@@ -81,9 +81,25 @@ class Dolibarr:
     @classmethod
     def delete_duplicates(cls, lst: list()) -> list():
         """
-        Take a list aand return the same list without the duplicated elements
+        Take a list or a list of lists and return the same list without the duplicated elements
         """
-        return list(dict.fromkeys(lst))  # Convert to dict then back to list. In fact, a dict couldn't have two times the same key.
+        try:  # A single list 
+           return list(dict.fromkeys(lst)) # Convert to dict then back to list. In fact, a dict couldn't have two times the same key.
+        except TypeError:  # A list of lists
+            seen_items = []
+            for ls in lst[:]: # Iterate over a copy because we remove item so the lenght of the list decrease -> if we remove in the original, some items will be skip
+                for elem in ls[:]:  
+                    print(elem)
+                    print(elem in seen_items)
+                    if elem in seen_items:
+                        ls.remove(elem)
+                    else:
+                        seen_items.append(elem)
+                if ls == []:
+                    lst.remove(ls)
+            return lst
+
+
     
 
 

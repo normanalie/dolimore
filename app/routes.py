@@ -30,6 +30,7 @@ def contract():
 def mailing():
     form = MailingForm()
     if "mailing_emails" in session:  # List of precedent emails selection
+        # A list of lists with all the precedent append: [ ['callA@gmail.com', 'callA@gmail.com'], ['callB@gmail.com', 'callB@gmail.com'] ]
         emails = session["mailing_emails"]
     else:
         emails = []
@@ -39,22 +40,34 @@ def mailing():
 
     if form.validate_on_submit():
         if form.submit.data:  # Submit button
+            extracted_emails = []  # A local list of all emails from selected categories, added to session emails at the end
             emails_contact = Dolibarr.emails(["contact"], form.categories_contact.data, form.operator_contact.data)
             emails_customer = Dolibarr.emails(["customer"], form.categories_customer.data, form.operator_customer.data)
-            emails.extend(emails_contact)
-            emails.extend(emails_customer)
+            extracted_emails.extend(emails_contact)
+            extracted_emails.extend(emails_customer)
             if form.add_customer_contacts.data:
                 emails_customer_contacts = Dolibarr.customer_contacts_from_cat(form.categories_customer.data, form.operator_customer.data)
-                emails.extend(emails_customer_contacts)
-            emails = Dolibarr.delete_duplicates(emails)
+                extracted_emails.extend(emails_customer_contacts)
+            emails.append(extracted_emails)
         else:  # Delete button -> Empty emails list
             emails = []
 
     form.categories_contact.data = ""  # Empty default value at each reload 
     form.categories_customer.data = ""
 
-    session["mailing_emails"] = emails  # Store emails selection into session
+    print(f'EMIALS BEFORE: {emails}')
+    emails = Dolibarr.delete_duplicates(emails)
+    print(f'EMIALS AFTER: {emails}')
+    session["mailing_emails"] = emails  # Update session var
     return render_template('mailing.html', form=form, emails=emails)
+
+
+@app.route('/mailing/export')
+@login_required
+def mailing_export():
+     if "mailing_emails" in session:  # List of precedent emails selection
+        emails = session["mailing_emails"]
+
 
 
 @app.route('/login', methods=['GET', 'POST'])

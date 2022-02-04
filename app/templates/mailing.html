@@ -20,8 +20,13 @@
         {{ form.submit() }} {{ form.delete() }}
     </form>
     <ul>
-        {% for email in emails %}
-            <li>{{ email }}</li>
+        {% for sublist in emails %}
+            <li>Ajout {{ loop.index }}:</li>
+            <ul>
+            {% for email in sublist %}
+                <li>{{ email }}</li>
+            {% endfor %}
+            </ul>
         {% endfor %}
     </ul>
 </div>
