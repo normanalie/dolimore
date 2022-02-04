@@ -19,6 +19,7 @@
 
         {{ form.submit() }} {{ form.delete() }}
     </form>
+    <a href="{{ url_for('mailing_export') }}">Télécharger</a>
     <ul>
         {% for sublist in emails %}
             <li>Ajout {{ loop.index }}:</li>

@@ -88,7 +88,7 @@ def mailing_export():
 
         # Generate file
         Export.csv(full_emails, path)
-        return send_from_directory(directory=basedir, path=filename)
+        return send_from_directory(directory=basedir, path=filename, as_attachment=True)
 
 
 
