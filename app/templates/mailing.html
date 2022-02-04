@@ -17,7 +17,7 @@
         {{ form.categories_contact }}
         {{ form.operator_contact }}
 
-        {{ form.submit() }}
+        {{ form.submit() }} {{ form.delete() }}
     </form>
     <ul>
         {% for email in emails %}

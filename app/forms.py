@@ -25,6 +25,7 @@ class MailingForm(FlaskForm):
     operator_contact = RadioField("Filtre Contact", choices=[("and", "ET"), ("or", "OU")], default='and')
     add_customer_contacts = BooleanField("Ajouter les contacts des tiers ?")
     submit = SubmitField("Ajouter")
+    delete = SubmitField("Vider")
 
 class ContractForm(FlaskForm):
     object_number = IntegerField("Numéro objet", validators=[DataRequired(), Length(4, 4, "Longueur: 4 chiffres")])

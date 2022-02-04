@@ -38,14 +38,17 @@ def mailing():
     form.categories_customer.choices = Dolibarr.categories(types=["customer"])
 
     if form.validate_on_submit():
-        emails_contact = Dolibarr.emails(["contact"], form.categories_contact.data, form.operator_contact.data)
-        emails_customer = Dolibarr.emails(["customer"], form.categories_customer.data, form.operator_customer.data)
-        emails.extend(emails_contact)
-        emails.extend(emails_customer)
-        if form.add_customer_contacts.data:
-            emails_customer_contacts = Dolibarr.customer_contacts_from_cat(form.categories_customer.data, form.operator_customer.data)
-            emails.extend(emails_customer_contacts)
-        emails = Dolibarr.delete_duplicates(emails)
+        if form.submit.data:  # Submit button
+            emails_contact = Dolibarr.emails(["contact"], form.categories_contact.data, form.operator_contact.data)
+            emails_customer = Dolibarr.emails(["customer"], form.categories_customer.data, form.operator_customer.data)
+            emails.extend(emails_contact)
+            emails.extend(emails_customer)
+            if form.add_customer_contacts.data:
+                emails_customer_contacts = Dolibarr.customer_contacts_from_cat(form.categories_customer.data, form.operator_customer.data)
+                emails.extend(emails_customer_contacts)
+            emails = Dolibarr.delete_duplicates(emails)
+        else:  # Delete button -> Empty emails list
+            emails = []
 
     form.categories_contact.data = ""  # Empty default value at each reload 
     form.categories_customer.data = ""
