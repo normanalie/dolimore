@@ -52,6 +52,7 @@ class Dolibarr:
             emails = union(emails)
         return emails
 
+    #TODO: Separate in two functions, one to get customers IDs and one to get contacts from cust ID
     @classmethod
     def customer_contacts_from_cat(cls, categories: list(), operator: str()) -> list():
         """
@@ -74,20 +75,20 @@ class Dolibarr:
         r = requests.get(f"{cls.base_url}/htdocs/api/index.php/contacts?thirdparty_ids={customer_ids}", headers=cls.header)
         emails.extend(extract_propertie(r.json(), "email"))
 
-        emails = delete_duplicates(emails)
+        emails = cls.delete_duplicates(emails)
         return emails
 
+    @classmethod
+    def delete_duplicates(cls, lst: list()) -> list():
+        """
+        Take a list aand return the same list without the duplicated elements
+        """
+        return list(dict.fromkeys(lst))  # Convert to dict then back to list. In fact, a dict couldn't have two times the same key.
     
 
 
 def header(api_key):
     return {"DOLAPIKEY": api_key}
-
-def delete_duplicates(lst: list()) -> list():
-    """
-    Take a list aand return the same list without the duplicated elements
-    """
-    return list(dict.fromkeys(lst))  # Convert to dict then back to list. In fact, a dict couldn't have two times the same key.
 
 
 def extract_propertie(objects: list(), propertie: str()) -> list():
@@ -119,7 +120,7 @@ def union(lst: list()) -> list():
     union = []
     for lists in lst:
         union.extend(lists)  # extend is like append but add the elements one by one, not the entire list() object
-    union = delete_duplicates(union)
+    union = Dolibarr.delete_duplicates(union)
     return union
 
 

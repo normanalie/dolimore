@@ -29,32 +29,28 @@ def contract():
 @login_required
 def mailing():
     form = MailingForm()
-    if "mailing_emails" in session:
+    if "mailing_emails" in session:  # List of precedent emails selection
         emails = session["mailing_emails"]
     else:
         emails = []
 
-    categories_contact = Dolibarr.categories(types=["contact"])
-    form.categories_contact.choices = categories_contact
-    form.categories_contact.data = ""  # default value at each reload 
-    categories_customer = Dolibarr.categories(types=["customer"])
-    form.categories_customer.choices = categories_customer
-    form.categories_customer.data = ""
+    form.categories_contact.choices = Dolibarr.categories(types=["contact"])
+    form.categories_customer.choices = Dolibarr.categories(types=["customer"])
 
     if form.validate_on_submit():
-        cat_id_contact = form.categories_contact.data
-        cat_operator_contact = form.operator_contact.data
-        cat_id_customer = form.categories_customer.data
-        cat_operator_customer = form.operator_customer.data
-        emails_contact = Dolibarr.emails(["contact"], cat_id_contact, cat_operator_contact)
-        emails_customer = Dolibarr.emails(["customer"], cat_id_customer, cat_operator_customer)
+        emails_contact = Dolibarr.emails(["contact"], form.categories_contact.data, form.operator_contact.data)
+        emails_customer = Dolibarr.emails(["customer"], form.categories_customer.data, form.operator_customer.data)
         emails.extend(emails_contact)
         emails.extend(emails_customer)
         if form.add_customer_contacts.data:
-            emails_customer_contacts = Dolibarr.customer_contacts_from_cat(cat_id_customer, cat_operator_customer)
+            emails_customer_contacts = Dolibarr.customer_contacts_from_cat(form.categories_customer.data, form.operator_customer.data)
             emails.extend(emails_customer_contacts)
+        emails = Dolibarr.delete_duplicates(emails)
 
-    session["mailing_emails"] = emails
+    form.categories_contact.data = ""  # Empty default value at each reload 
+    form.categories_customer.data = ""
+
+    session["mailing_emails"] = emails  # Store emails selection into session
     return render_template('mailing.html', form=form, emails=emails)
 
 
