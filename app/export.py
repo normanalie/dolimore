@@ -1,5 +1,6 @@
 import csv
 import os
+from tkinter import dialog
 
 class Export:
     @classmethod
@@ -25,7 +26,7 @@ class Export:
         path = os.path.join(current_dir, path)
         if path.endswith(".csv"):
             with open(path, "w") as f:
-                writer = csv.writer(f)
+                writer = csv.writer(f, dialect='excel', delimiter='\n', quoting=csv.QUOTE_ALL)  # Some version of excel require a \n as separator.
                 writer.writerow(lst)
             return path
         return 1
