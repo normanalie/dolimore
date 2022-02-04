@@ -15,7 +15,7 @@ from wtforms import (
 class LoginForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
-    remember_me = BooleanField("Rester connecté", validators=[DataRequired()])
+    remember_me = BooleanField("Rester connecté")
     submit = SubmitField("Se connecter")
 
 class MailingForm(FlaskForm):
