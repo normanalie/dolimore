@@ -12,6 +12,9 @@ class IndexView(AdminIndexView):
             if u.is_admin:
                 return True
         return False
+    
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('index'))
         
 
 class UserView(ModelView):
