@@ -131,20 +131,22 @@ def logout():
 
 @bp.route('/firstconnection', methods=["GET", "POST"])
 def firsconnection():
-    form = CreateAdminForm()
-    errors = []
+    if len(User.query.all()) == 0:  # No user in db
+        form = CreateAdminForm()
+        errors = []
 
-    if form.validate_on_submit():
-        username = form.username.data
-        email = form.email.data
-        password = form.password.data
-        u = User(username=username, email=email, is_admin=True)
-        u.set_password(password)
-        current_app.db.session.add(u)
-        current_app.db.commit()
-        return redirect(url_for('main.login'))
-    
-    if request.method == 'POST' and not form.validate():
-        errors.append("Formulaire invalide")
+        if form.validate_on_submit():
+            username = form.username.data
+            email = form.email.data
+            password = form.password.data
+            u = User(username=username, email=email, is_admin=True)
+            u.set_password(password)
+            current_app.db.session.add(u)
+            current_app.db.commit()
+            return redirect(url_for('main.login'))
+        
+        if request.method == 'POST' and not form.validate():
+            errors.append("Formulaire invalide")
 
-    return render_template('firstconnection.html', form=form, errors=errors)
+        return render_template('firstconnection.html', form=form, errors=errors)
+    return redirect(url_for('main.index'))
