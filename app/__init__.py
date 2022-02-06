@@ -18,11 +18,10 @@ from app import routes, models
 
 
 # ADMIN PANEL
-from app.views import AdminIndexView
-from flask_admin.contrib.sqla import ModelView
+from app.admin_views import IndexView, UserView
 from app.models import User
 
 
-admin = Admin(app, index_view=AdminIndexView())
+admin = Admin(app, index_view=IndexView())
 
-admin.add_view(ModelView(User, db.session))
+admin.add_view(UserView(User, db.session))
