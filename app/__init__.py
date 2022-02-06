@@ -7,7 +7,7 @@ from flask_admin import Admin
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
-login.login_view = 'login'
+login.login_view = 'main.login'
 admin = Admin()
 
 def create_app():
