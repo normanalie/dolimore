@@ -1,26 +1,25 @@
 from datetime import datetime
 
-from flask import redirect, render_template, request, send_from_directory, session, url_for
+from flask import redirect, render_template, request, send_from_directory, session, url_for, Blueprint, current_app
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from app import app
 from app.forms import LoginForm, ContractForm, MailingForm
 from app.models import User
 
 from .dolibarr import Dolibarr
 from .export import Export
 
-Dolibarr.config(app.config["DOLIBARR_API_KEY"], app.config["DOLIBARR_BASE_URL"])
+bp = Blueprint('main', __name__, url_prefix="")
 
 
-@app.route('/')
-@app.route('/index/')
+@bp.route('/')
+@bp.route('/index/')
 def index():
     return render_template('index.html')
 
 
-@app.route('/contract/', methods=['GET', 'POST'])
+@bp.route('/contract/', methods=['GET', 'POST'])
 @login_required
 def contract():
     form = ContractForm()
@@ -28,7 +27,7 @@ def contract():
     return render_template('contract.html', form=form, tiers=tiers)
 
 
-@app.route('/mailing/', methods=["GET", "POST"])
+@bp.route('/mailing/', methods=["GET", "POST"])
 @login_required
 def mailing():
     form = MailingForm()
@@ -63,7 +62,7 @@ def mailing():
     return render_template('mailing.html', form=form, emails=emails)
 
 
-@app.route('/mailing/export/')
+@bp.route('/mailing/export/')
 @login_required
 def mailing_export():
      if "mailing_emails" in session:  # List of precedent emails selection
@@ -77,7 +76,7 @@ def mailing_export():
                     full_emails.append(email)
 
         # Generate path
-        basedir = app.config["EXPORT_FOLDER"]
+        basedir = current_app.config["EXPORT_FOLDER"]
         ts = datetime.timestamp(datetime.now())
         ts = str(ts).split('.')[0]  # Remove miliseconds from timestamp
         username = current_user.username
@@ -92,11 +91,11 @@ def mailing_export():
 
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
     errors = []
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
 
     form = LoginForm()
     if form.validate_on_submit():  # POST processing
@@ -109,12 +108,12 @@ def login():
             login_user(user, remember=form.remember_me.data)
             next_page = request.args.get('next')
             if not next_page or url_parse(next_page).netloc != '':  # Check if there is a next_page and if the next_page is a relative path
-                next_page = url_for('index')
+                next_page = url_for('main.index')
             return redirect(next_page)
     return render_template('login.html', form=form, errors=errors)
 
 
-@app.route('/logout/')
+@bp.route('/logout/')
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))

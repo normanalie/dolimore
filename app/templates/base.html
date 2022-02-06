@@ -28,23 +28,23 @@
             <div class="navbar collapse navbar-collapse" id="navbarCollapse">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}">Accueil</a>
+                    <a class="nav-link" href="{{ url_for('main.index') }}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('mailing') }}">Mailing</a>
+                    <a class="nav-link" href="{{ url_for('main.mailing') }}">Mailing</a>
                 </li>
               </ul>
                 <ul class="navbar-nav justify-content-end">
                     {% if current_user.is_anonymous %}
                     <li class="nav-item">
-                        <button class="btn btn-outline-success btn-sm" onclick="location.href='{{ url_for('login') }}'">Connexion</a>
+                        <button class="btn btn-outline-success btn-sm" onclick="location.href='{{ url_for('main.login') }}'">Connexion</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
                         <span class="nav-link disabled">{{ current_user.email }}</span>
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-outline-secondary btn-sm" onclick="location.href='{{ url_for('logout') }}'">Deconnexion</a>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="location.href='{{ url_for('main.logout') }}'">Deconnexion</a>
                     </li>
                     {% endif %}
                 </ul>

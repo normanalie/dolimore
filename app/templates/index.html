@@ -9,7 +9,7 @@
             <h1 class="mb-4">DOLIMORE</h1>
             {% if current_user.is_anonymous %}
             <div class="d-grid">
-                <button type="button" class="btn btn-lg btn-success" onclick="location.href='{{ url_for('login') }}'">Se connecter</button>
+                <button type="button" class="btn btn-lg btn-success" onclick="location.href='{{ url_for('main.login') }}'">Se connecter</button>
             </div>
             {% else %}
             <div class="text-center h3 text-muted">
