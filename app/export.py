@@ -1,6 +1,5 @@
 import csv
 import os
-from tkinter import dialog
 
 class Export:
     @classmethod
