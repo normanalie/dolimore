@@ -4,24 +4,19 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_admin import Admin
 
-app = Flask(__name__)
-app.config.from_pyfile("config.py")
-
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
-login = LoginManager(app)
+db = SQLAlchemy()
+migrate = Migrate()
+login = LoginManager()
 login.login_view = 'login'
+admin = Admin()
 
+def create_app():
+    app = Flask(__name__)
+    app.config.from_pyfile("config.py")
+    
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login.init_app(app)
+    admin.init_app(app)
 
-from app import routes, models
-
-
-# ADMIN PANEL
-from app.admin_views import IndexView, UserView
-from app.models import User
-
-
-admin = Admin(app, index_view=IndexView())
-
-admin.add_view(UserView(User, db.session))
+    return app
