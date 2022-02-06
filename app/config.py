@@ -13,10 +13,11 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
+
 TESTING = True
 DEBUG = True
 DEVELOPMENT = True
-SECRET_KEY = '247MKgKxgc'
+SECRET_KEY = os.environ.get('SECRET_KEY') or '247MKgKxgc'
 
 UPLOAD_FOLDER = "static/files/upload"
 EXPORT_FOLDER = "static/files/export"
