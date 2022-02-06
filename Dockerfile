@@ -22,4 +22,4 @@ RUN chown -R dolimore:dolimore ./
 USER dolimore
 
 EXPOSE 5000
-ENTRYPOINT ["sh", "./boot.sh"]
+ENTRYPOINT ["./boot.sh"]
