@@ -1,4 +1,3 @@
-from ast import Pass
 from email.policy import default
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length, Regexp, Email, EqualTo
