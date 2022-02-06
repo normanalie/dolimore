@@ -130,7 +130,7 @@ def logout():
 
 
 @bp.route('/firstconnection', methods=["GET", "POST"])
-def firsconnection():
+def firstconnection():
     if len(User.query.all()) == 0:  # No user in db
         form = CreateAdminForm()
         errors = []
