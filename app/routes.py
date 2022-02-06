@@ -14,14 +14,8 @@ from .export import Export
 bp = Blueprint('main', __name__, url_prefix="")
 
 
-@bp.before_app_first_request
-def first_request():
-    return redirect(url_for('main.firstconnection'))
 
-@bp.before_app_request
-def check_firstconnection():
-    if len(User.query.all()) == 0:  # No user in db
-        return redirect(url_for('main.firstconnection'))
+
 
 @bp.route('/')
 @bp.route('/index/')
@@ -128,8 +122,7 @@ def logout():
     logout_user()
     return redirect(url_for('main.index'))
 
-
-@bp.route('/firstconnection', methods=["GET", "POST"])
+@bp.before_app_request
 def firstconnection():
     if len(User.query.all()) == 0:  # No user in db
         form = SignupForm()
@@ -149,4 +142,4 @@ def firstconnection():
             errors.append(form.errors)
 
         return render_template('firstconnection.html', form=form, errors=errors)
-    return redirect(url_for('main.index'))
+    
