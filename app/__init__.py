@@ -17,10 +17,12 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
-    admin.init_app(app)
-
+    
     from . import routes, models
     app.register_blueprint(routes.bp)
+
+    from .admin_views import IndexView
+    admin.init_app(app, index_view=IndexView())
 
     from .dolibarr import Dolibarr
     Dolibarr.config(app.config["DOLIBARR_API_KEY"], app.config["DOLIBARR_BASE_URL"])
