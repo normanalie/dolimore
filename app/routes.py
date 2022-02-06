@@ -4,6 +4,7 @@ from flask import redirect, render_template, request, send_from_directory, sessi
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
+from app import db
 from app.forms import LoginForm, ContractForm, MailingForm, CreateAdminForm
 from app.models import User
 
@@ -140,12 +141,12 @@ def firstconnection():
             password = form.password.data
             u = User(username=username, email=email, is_admin=True)
             u.set_password(password)
-            current_app.db.session.add(u)
-            current_app.db.commit()
+            db.session.add(u)
+            db.session.commit()
             return redirect(url_for('main.login'))
         
         if request.method == 'POST' and not form.validate():
-            errors.append("Formulaire invalide")
+            errors.append(form.errors)
 
         return render_template('firstconnection.html', form=form, errors=errors)
     return redirect(url_for('main.index'))
