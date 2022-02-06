@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Premiers pas - Dolimore{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid mt-5 ">
+    <div class="col text-center">
+        <h1>Ajouter un administrateur</h1>
+    </div>
+
+    <form action="" method="post" class="form-signin">
+        {{ form.hidden_tag() }}
+
+        {% if errors %}
+        <div class="form-group alert alert-danger">
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {{ form.username.label(class="visually-hidden") }}
+        {{ form.username(size=64, class="form-control", placeholder="Nom de l'admin", autofocus='') }}
+
+        {{ form.email.label(class="visually-hidden") }}
+        {{ form.email(size=64, class="form-control", placeholder="Adresse email", autofocus='') }}
+
+        {{ form.password.label(class="visually-hidden") }}
+        {{ form.password(size=64, class="form-control", placeholder="Mot de passe") }}
+
+        {{ form.password_repeat.label(class="visually-hidden") }}
+        {{ form.password_repeat(size=64, class="form-control", placeholder="Répeter le mot de passe") }}
+
+
+        <div class="d-grid">
+            {{ form.submit(class="btn btn-lg btn-primary") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

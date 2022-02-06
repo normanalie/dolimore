@@ -1,6 +1,7 @@
+from ast import Pass
 from email.policy import default
 from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired, Length, Regexp, Email
+from wtforms.validators import DataRequired, Length, Regexp, Email, EqualTo
 from wtforms import (
     StringField, TextAreaField, 
     SelectField, RadioField, SelectMultipleField,
@@ -17,6 +18,13 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
     remember_me = BooleanField("Rester connecté")
     submit = SubmitField("Se connecter")
+
+class CreateAdminForm(FlaskForm):  # Create a admin user the first time the app is launched
+    username = StringField("Username", validators=[DataRequired()])
+    email = EmailField("Email", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    password_confirmation = PasswordField("Repeat password", validators=[EqualTo(password)])
+    submit = SubmitField("Créer")
 
 class MailingForm(FlaskForm):
     categories_customer = SelectMultipleField("Catégories Tiers")
