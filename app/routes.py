@@ -16,12 +16,12 @@ from .export import Export
 Dolibarr.config(dolibarr_config.API_KEY, dolibarr_config.BASE_URL)
 
 @app.route('/')
-@app.route('/index')
+@app.route('/index/')
 def index():
     return render_template('index.html')
 
 
-@app.route('/contract', methods=['GET', 'POST'])
+@app.route('/contract/', methods=['GET', 'POST'])
 @login_required
 def contract():
     form = ContractForm()
@@ -29,7 +29,7 @@ def contract():
     return render_template('contract.html', form=form, tiers=tiers)
 
 
-@app.route('/mailing', methods=["GET", "POST"])
+@app.route('/mailing/', methods=["GET", "POST"])
 @login_required
 def mailing():
     form = MailingForm()
@@ -64,7 +64,7 @@ def mailing():
     return render_template('mailing.html', form=form, emails=emails)
 
 
-@app.route('/mailing/export')
+@app.route('/mailing/export/')
 @login_required
 def mailing_export():
      if "mailing_emails" in session:  # List of precedent emails selection
@@ -115,7 +115,7 @@ def login():
     return render_template('login.html', form=form, errors=errors)
 
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     logout_user()
     return redirect(url_for('index'))
