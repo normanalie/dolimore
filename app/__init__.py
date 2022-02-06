@@ -19,4 +19,11 @@ def create_app():
     login.init_app(app)
     admin.init_app(app)
 
+    from . import routes, models
+    app.register_blueprint(routes.bp)
+
+    from .dolibarr import Dolibarr
+    Dolibarr.config(app.config["DOLIBARR_API_KEY"], app.config["DOLIBARR_BASE_URL"])
+
     return app
+
