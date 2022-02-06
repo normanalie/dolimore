@@ -23,6 +23,7 @@ class SignupForm(FlaskForm):  # Create a admin user the first time the app is la
     email = EmailField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     password_confirmation = PasswordField("Repeat password", validators=[EqualTo('password')])
+    is_admin = BooleanField("Administrateur", default=False)
     submit = SubmitField("Créer")
 
 class MailingForm(FlaskForm):
