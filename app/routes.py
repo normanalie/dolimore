@@ -9,11 +9,10 @@ from app.forms import LoginForm, ContractForm, MailingForm
 from app.models import User
 
 from .dolibarr import Dolibarr
-from . import dolibarr_config
-
 from .export import Export
 
-Dolibarr.config(dolibarr_config.API_KEY, dolibarr_config.BASE_URL)
+Dolibarr.config(app.config["DOLIBARR_API_KEY"], app.config["DOLIBARR_BASE_URL"])
+
 
 @app.route('/')
 @app.route('/index/')
