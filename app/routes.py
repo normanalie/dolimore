@@ -5,7 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app import db
-from app.forms import LoginForm, ContractForm, MailingForm, CreateAdminForm
+from app.forms import LoginForm, ContractForm, MailingForm, SignupForm
 from app.models import User
 
 from .dolibarr import Dolibarr
@@ -14,12 +14,18 @@ from .export import Export
 bp = Blueprint('main', __name__, url_prefix="")
 
 
-@bp.route('/')
-@bp.route('/index/')
-def index():
+@bp.before_app_first_request
+def first_request():
+    return redirect(url_for('main.firstconnection'))
+
+@bp.before_app_request
+def check_firstconnection():
     if len(User.query.all()) == 0:  # No user in db
         return redirect(url_for('main.firstconnection'))
 
+@bp.route('/')
+@bp.route('/index/')
+def index():
     return render_template('index.html')
 
 
@@ -34,9 +40,6 @@ def contract():
 @bp.route('/mailing/', methods=["GET", "POST"])
 @login_required
 def mailing():
-    if len(User.query.all()) == 0:  # No user in db
-        return redirect(url_for('main.firstconnection'))
-
     form = MailingForm()
     if "mailing_emails" in session:  # List of precedent emails selection
         # A list of lists with all the precedent append: [ ['callA@gmail.com', 'callA@gmail.com'], ['callB@gmail.com', 'callB@gmail.com'] ]
@@ -100,9 +103,6 @@ def mailing_export():
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if len(User.query.all()) == 0:  # No user in db
-        return redirect(url_for('main.firstconnection'))
-
     errors = []
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
@@ -132,7 +132,7 @@ def logout():
 @bp.route('/firstconnection', methods=["GET", "POST"])
 def firstconnection():
     if len(User.query.all()) == 0:  # No user in db
-        form = CreateAdminForm()
+        form = SignupForm()
         errors = []
 
         if form.validate_on_submit():

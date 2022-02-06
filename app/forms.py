@@ -18,7 +18,7 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField("Rester connecté")
     submit = SubmitField("Se connecter")
 
-class CreateAdminForm(FlaskForm):  # Create a admin user the first time the app is launched
+class SignupForm(FlaskForm):  # Create a admin user the first time the app is launched
     username = StringField("Username", validators=[DataRequired()])
     email = EmailField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
