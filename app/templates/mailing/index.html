@@ -26,7 +26,15 @@
 
             </div>
 
-            {{ form.categories_customer(class="form-control") }}
+            <div class="my-2">
+                <h4 class="text-muted">Catégories</h4>
+                {{ form.categories_customer(class="form-control") }}
+            </div>
+
+            <div class="my-2">
+                <h4 class="text-muted">Départements</h4>
+                {{ form.departments_customer(class="form-control") }}
+            </div>
 
             <div class="form-check">
                 {{ form.add_customer_contacts() }} {{ form.add_customer_contacts.label }}
