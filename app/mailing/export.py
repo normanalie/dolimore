@@ -21,8 +21,6 @@ class Export:
         Take the full path with filename and a list of values and write them in a single row in a csv file. 
         Return the path of the file or 1 if error.
         """
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(current_dir, path)
         if path.endswith(".csv"):
             with open(path, "w") as f:
                 writer = csv.writer(f, dialect='excel', delimiter='\n', quoting=csv.QUOTE_ALL)  # Some version of excel require a \n as separator.

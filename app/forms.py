@@ -1,9 +1,7 @@
-from email.policy import default
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length, Regexp, Email, EqualTo
 from wtforms import (
     StringField, TextAreaField, 
-    SelectField, RadioField, SelectMultipleField,
     IntegerField, FloatField,
     EmailField, TelField, 
     DateField, 
@@ -25,15 +23,6 @@ class SignupForm(FlaskForm):  # Create a admin user the first time the app is la
     password_confirmation = PasswordField("Repeat password", validators=[EqualTo('password')])
     is_admin = BooleanField("Administrateur", default=False)
     submit = SubmitField("Créer")
-
-class MailingForm(FlaskForm):
-    categories_customer = SelectMultipleField("Catégories Tiers")
-    categories_contact = SelectMultipleField("Catégories Contact")
-    operator_customer = RadioField("Filtre Tiers", choices=[("and", "ET"), ("or", "OU")], default='and')
-    operator_contact = RadioField("Filtre Contact", choices=[("and", "ET"), ("or", "OU")], default='and')
-    add_customer_contacts = BooleanField("Ajouter les contacts des tiers ?")
-    submit = SubmitField("Ajouter")
-    delete = SubmitField("Vider")
 
 class ContractForm(FlaskForm):
     object_number = IntegerField("Numéro objet", validators=[DataRequired(), Length(4, 4, "Longueur: 4 chiffres")])

@@ -18,13 +18,14 @@ def create_app():
     migrate.init_app(app, db)
     login.init_app(app)
     
-    from . import routes, models
+    from . import routes, mailing, models
     app.register_blueprint(routes.bp)
+    app.register_blueprint(mailing.bp, url_prefix="/mailing")
 
     from .admin_views import IndexView
     admin.init_app(app, index_view=IndexView())
 
-    from .dolibarr import Dolibarr
+    from .mailing.dolibarr import Dolibarr
     Dolibarr.config(app.config["DOLIBARR_API_KEY"], app.config["DOLIBARR_BASE_URL"])
 
     return app
