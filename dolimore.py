@@ -7,3 +7,6 @@ admin.index_view = IndexView()
 admin.add_view(UserView(User, db.session))
 
 app = create_app()
+
+if __name__ == "__main__":
+    app.run()
