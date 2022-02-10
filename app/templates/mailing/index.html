@@ -15,21 +15,18 @@
 
     <div class="form-group row">
         <div class="col form-control">
+            <h2>Tiers</h2>
             <div class="d-flex align-bottom">
-                <div class="d-inline-block"><h2>Tiers</h2></div>
-
+                <div class="d-inline-block">
+                    <h4 class="text-muted">Catégories</h4>   
+                </div>
                 {% for operator in form.operator_customer %}
-                <div class="d-inline-block pt-3 form-check form-check-inline">
+                <div class="d-inline-block pt-1 form-check form-check-inline">
                 {{ operator() }} {{ operator.label }}
                 </div>
                 {% endfor %}
-
             </div>
-
-            <div class="my-2">
-                <h4 class="text-muted">Catégories</h4>
-                {{ form.categories_customer(class="form-control") }}
-            </div>
+            {{ form.categories_customer(class="form-control") }}
 
             <div class="my-2">
                 <h4 class="text-muted">Départements</h4>
