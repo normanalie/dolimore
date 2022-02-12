@@ -37,6 +37,62 @@ class Dolibarr:
         return list
 
     @classmethod
+    def get(cls, filters: dict())->dict():
+        """
+        filters: { "filter":"value" }
+         - "type": "customer" or "contact". Default: both
+         - "contacts": True or False. For customer type: get associated contacts. Default: False
+         - "categories": [int, ...]. List of categories to look for. REQUIRED
+         - "operator": "and" or "or". How the filter work between categories Default: or
+         - "countries": [str, ...]. List of country codes (alpha-2) to look for. Default: all
+         - "zip": [str, ...]. List of zip-codes to look for. Default: all
+
+         Return a dict: { id:email }
+        """
+        # Check args
+        if not "categories" in filters:
+            return 1
+
+        items = {}
+        types = filters["type"] if "type" in filters else ["customer", "contact"]
+
+        for type in types:
+            temp_items = {}  # Used to get only customers ids
+            for categorie in filters["categories"]:
+                r = requests.get(f"{cls.base_url}/htdocs/api/index.php/categories/{categorie}/objects?type={type}", headers=cls.header)
+                for object in r.json():  # Filter response and add to temp_items
+                    check = True
+                    if "countries" in filters:
+                        if not object["country_code"] in filters["countries"]:
+                            check = False
+                    if "zip" in filters:
+                        if not object["zip"] in filters["zip"]:
+                            check = False
+                    if check:
+                        temp_items.update({ object["id"]: object["email"]})
+
+            if type == "customer" and "contacts" in filters:  # Add associated contacts for customers. Use temp_items to get only customers ids
+                if filters["contacts"]:
+                    temp_items.update(cls.get_contacts(customer_ids = temp_items.keys()))
+            items.update(temp_items)
+        return items
+
+
+    @classmethod
+    def get_contacts(cls, customer_ids: list())->dict():
+        """
+        Take customer (thirdpartie) ids and return a dict of associated contacts {id:email}
+        """
+        contacts = {}
+        customer_ids = ','.join(customer_ids)  # Dolibarr API can take a comma-separated list of ids to reduce API calls 
+        r = requests.get(f"{cls.base_url}/htdocs/api/index.php/contacts?thirdparty_ids={customer_ids}", headers=cls.header)
+        for object in r.json():
+            contacts.update({ object["id"]: object["email"]})
+
+        return contacts
+
+
+    @classmethod
     def emails(cls, types: list(), categories: list(), operator: str()) -> list():
         """
         Take type of contact (customer and/or contact), categories tags associated (id) and the operator to filter the categories (and/or) 
@@ -103,6 +159,7 @@ class Dolibarr:
 
 def header(api_key):
     return {"DOLAPIKEY": api_key}
+
 
 
 def extract_propertie(objects: list(), propertie: str()) -> list():
