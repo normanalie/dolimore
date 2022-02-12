@@ -1,5 +1,7 @@
 import requests
 
+from .department import Department
+
 
 class Dolibarr:
     @classmethod
@@ -46,6 +48,7 @@ class Dolibarr:
          - "operator": "and" or "or". How the filter work between categories Default: or
          - "countries": [str, ...]. List of country codes (alpha-2) to look for. Default: all
          - "zip": [str, ...]. List of zip-codes to look for. Default: all
+         - "departements": [str, ...]. List of INSEE departements (FR only) codes to look for. Default: all
 
          Return a dict: { id:email }
         """
@@ -68,6 +71,12 @@ class Dolibarr:
                     if "zip" in filters:
                         if not object["zip"] in filters["zip"]:
                             check = False
+                    if "departements" in filters:
+                        object_departement = Department.departement(object["zip"])  
+                        object_departement = None if object_departement is None else object_departement[0]  # Take only the insee code (index 0). If zip not set in dolibarr, value is None.
+                        if not object_departement in filters["departements"]:
+                            check = False
+
                     if check:
                         temp_items.update({ object["id"]: object["email"]})
 
