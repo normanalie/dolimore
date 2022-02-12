@@ -106,13 +106,16 @@ class Department:
 
     @classmethod
     def departement(self, zip)->tuple():
+        """
+        Take a zip code and return the INSEE departement code and name: ("01", "Ain")
+        """
         zip = str(zip)
-        dep_insee = zip[-3:]  # remove last three chars
+        dep_insee = zip[:-3]  # remove last three chars
 
         if len(dep_insee) == 1:  # zip 01530 and 1530 is the same
             dep_insee = "0"+dep_insee
         if dep_insee in self.DEPARTEMENTS_DICT.keys():
-            return self.DEPARTEMENTS_DICT[dep_insee]
+            return dep_insee, self.DEPARTEMENTS_DICT[dep_insee]
         return None
 
 
