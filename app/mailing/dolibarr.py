@@ -48,13 +48,16 @@ class Dolibarr:
          - "operator": "and" or "or". How the filter work between categories Default: or
          - "countries": [str, ...]. List of country codes (alpha-2) to look for. Default: all
          - "zip": [str, ...]. List of zip-codes to look for. Default: all
-         - "departements": [str, ...]. List of INSEE departements (FR only) codes to look for. Default: all
+         - "departments": [str, ...]. List of INSEE departements (FR only) codes to look for. Default: all
 
          Return a dict: { id:email }
         """
         # Check args
         if not "categories" in filters:
             return 1
+        countries = True if "countries" in filters and filters["countries"] != [] else False
+        zip = True if "zip" in filters and filters["zip"] != [] else False
+        departments = True if "departments" in filters and filters["departments"] != [] else False
 
         items = {}
         types = filters["type"] if "type" in filters else ["customer", "contact"]
@@ -65,16 +68,16 @@ class Dolibarr:
                 r = requests.get(f"{cls.base_url}/htdocs/api/index.php/categories/{categorie}/objects?type={type}", headers=cls.header)
                 for object in r.json():  # Filter response and add to temp_items
                     check = True
-                    if "countries" in filters:
+                    if countries:
                         if not object["country_code"] in filters["countries"]:
                             check = False
-                    if "zip" in filters:
+                    if zip:
                         if not object["zip"] in filters["zip"]:
                             check = False
-                    if "departements" in filters:
+                    if departments:
                         object_departement = Department.departement(object["zip"])  
                         object_departement = None if object_departement is None else object_departement[0]  # Take only the insee code (index 0). If zip not set in dolibarr, value is None.
-                        if not object_departement in filters["departements"]:
+                        if not object_departement in filters["departments"]:
                             check = False
 
                     if check:
