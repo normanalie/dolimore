@@ -32,12 +32,18 @@ def index():
         if form.submit.data:  # Submit button
             extracted_emails = []  # A local list of all emails from selected categories, added to session emails at the end
             emails_contact = Dolibarr.emails(["contact"], form.categories_contact.data, form.operator_contact.data)
-            emails_customer = Dolibarr.emails(["customer"], form.categories_customer.data, form.operator_customer.data)
+            emails_customer = Dolibarr.get(filters={
+                "type": ["customer"], 
+                "contacts": form.add_customer_contacts.data,
+                "categories": form.categories_customer.data,
+                "departements": form.departments_customer.data,
+                "operator": form.operator_customer.data
+                })
+            emails_customer = emails_customer.values()  # Get return a dict, we only want emails. 
+            #emails_customer = Dolibarr.emails(["customer"], form.categories_customer.data, form.operator_customer.data)
             extracted_emails.extend(emails_contact)
             extracted_emails.extend(emails_customer)
-            if form.add_customer_contacts.data:
-                emails_customer_contacts = Dolibarr.customer_contacts_from_cat(form.categories_customer.data, form.operator_customer.data)
-                extracted_emails.extend(emails_customer_contacts)
+
             emails.append(extracted_emails)
         else:  # Delete button -> Empty emails list
             emails = []
