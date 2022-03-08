@@ -36,7 +36,7 @@ def index():
                 "type": ["customer"], 
                 "contacts": form.add_customer_contacts.data,
                 "categories": form.categories_customer.data,
-                "departements": form.departments_customer.data,
+                "departments": form.departments_customer.data,
                 "operator": form.operator_customer.data
                 })
             emails_customer = emails_customer.values()  # Get return a dict, we only want emails. 
