@@ -79,11 +79,13 @@ class Dolibarr:
 
                     if check:
                         temp_items.update({ object["id"]: object["email"]})
-
+                    
             if type == "customer" and "contacts" in filters:  # Add associated contacts for customers. Use temp_items to get only customers ids
                 if filters["contacts"]:
                     temp_items.update(cls.get_contacts(customer_ids = temp_items.keys()))
             items.update(temp_items)
+        
+        items = remove_val(items, None)
         return items
 
 
@@ -92,11 +94,16 @@ class Dolibarr:
         """
         Take customer (thirdpartie) ids and return a dict of associated contacts {id:email}
         """
+        # check args
+        if not customer_ids:  # Dolibarr return random contacts if no id is provided
+            return {}
+
         contacts = {}
         customer_ids = ','.join(customer_ids)  # Dolibarr API can take a comma-separated list of ids to reduce API calls 
         r = requests.get(f"{cls.base_url}/htdocs/api/index.php/contacts?thirdparty_ids={customer_ids}", headers=cls.header)
         for object in r.json():
-            contacts.update({ object["id"]: object["email"]})
+            if object["email"]:  # email field is not mandatory in Dolibarr
+                contacts.update({ object["id"]: object["email"] })
 
         return contacts
 
@@ -169,6 +176,13 @@ class Dolibarr:
 def header(api_key):
     return {"DOLAPIKEY": api_key}
 
+
+def remove_val(dic: dict(), val)->dict():
+    dic_copy = dic.copy()  # Iterate trought a copy to directly delete values
+    for k, v in dic_copy.items():
+        if v == val:
+            del dic[k]
+    return dic
 
 
 def extract_propertie(objects: list(), propertie: str()) -> list():
