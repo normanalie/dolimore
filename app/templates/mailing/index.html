@@ -3,6 +3,8 @@
 {% block title %}Mailing - Dolimore{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/multiselect.css') }}">
+<script src="{{ url_for('static', filename='js/multiselect.min.js') }}"></script>
 <div class="container mt-3">
 <div class="row mb-3">
     <div class="col">
@@ -21,9 +23,9 @@
                     <h4 class="text-muted">Catégories</h4>   
                 </div>
                 {% for operator in form.operator_customer %}
-                <div class="d-inline-block pt-1 form-check form-check-inline">
-                {{ operator() }} {{ operator.label }}
-                </div>
+                    <div class="d-inline-block pt-1 form-check form-check-inline">
+                    {{ operator() }} {{ operator.label }}
+                    </div>
                 {% endfor %}
             </div>
             {{ form.categories_customer(class="form-control") }}
@@ -39,18 +41,25 @@
         </div>
 
         <div class="col form-control">
+            <h2>Contact</h2>
             <div class="d-flex align-bottom">
-                <div class="d-inline-block"><h2>Contact</h2></div>
-            
-                {% for operator in form.operator_contact %}
-                <div class="d-inline-block pt-3 form-check form-check-inline">
-                {{ operator }} {{ operator.label }}
+                <div class="d-inline-block">
+                    <h4 class="text-muted">Catégories</h4>   
                 </div>
+                {% for operator in form.operator_contact %}
+                    <div class="d-inline-block pt-1 form-check form-check-inline">
+                    {{ operator }} {{ operator.label }}
+                    </div>
                 {% endfor %}
 
             </div>
 
             {{ form.categories_contact(class="form-control") }}
+
+            <div class="my-2">
+                <h4 class="text-muted">Départements</h4>
+                {{ form.departments_contact(class="form-control") }}
+            </div>
         </div>
     </div>
     <div class="pt-3 text-center row">
@@ -73,4 +82,10 @@
     </ul>
 </div>
 </div>
+<script>
+    document.multiselect('#categories_customer');
+    document.multiselect('#departments_customer');
+    document.multiselect('#categories_contact');
+    document.multiselect('#departments_contact');
+</script>
 {% endblock %}
