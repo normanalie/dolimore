@@ -55,6 +55,7 @@ class Dolibarr:
         # Check args
         if not "categories" in filters:
             return 1
+        operator = filters["operator"] if "operator" in filters and filters["operator"] == "and" else "or"
         countries = True if "countries" in filters and filters["countries"] != [] else False
         zip = True if "zip" in filters and filters["zip"] != [] else False
         departments = True if "departments" in filters and filters["departments"] != [] else False
@@ -63,8 +64,8 @@ class Dolibarr:
         types = filters["type"] if "type" in filters else ["customer", "contact"]
 
         for type in types:
-            temp_items = {}  # Used to get only customers ids
             for categorie in filters["categories"]:
+                temp_items = {}  # Used to get only customers ids
                 r = requests.get(f"{cls.base_url}/htdocs/api/index.php/categories/{categorie}/objects?type={type}", headers=cls.header)
                 for object in r.json():  # Filter response and add to temp_items
                     check = True
@@ -82,11 +83,22 @@ class Dolibarr:
 
                     if check:
                         temp_items.update({ object["id"]: object["email"]})
-                    
+                
+                if operator == "and":
+                    if items == {}:  # First request, items is empty
+                        items.update(temp_items)
+                    else:  # Add only common items.
+                        ids = intersection([temp_items.keys(), items.keys()])
+                        items_copy = items.copy()
+                        for id in items_copy.keys():
+                            if not id in ids:
+                                items.pop(id)
+                else:
+                    items.update(temp_items)
+
             if type == "customer" and "contacts" in filters:  # Add associated contacts for customers. Use temp_items to get only customers ids
                 if filters["contacts"]:
-                    temp_items.update(cls.get_contacts(customer_ids = temp_items.keys()))
-            items.update(temp_items)
+                    items.update(cls.get_contacts(customer_ids = items.keys()))
         
         items = remove_val(items, None)
         return items
