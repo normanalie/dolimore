@@ -31,7 +31,13 @@ def index():
     if form.validate_on_submit():
         if form.submit.data:  # Submit button
             extracted_emails = []  # A local list of all emails from selected categories, added to session emails at the end
-            emails_contact = Dolibarr.emails(["contact"], form.categories_contact.data, form.operator_contact.data)
+            emails_contact = Dolibarr.get(filters={
+                "type": ["contact"],
+                "categories": form.categories_contact.data,
+                "departments": form.departments_contact.data,
+                "operator": form.operator_contact.data
+            })
+            emails_contact = emails_contact.values()
             emails_customer = Dolibarr.get(filters={
                 "type": ["customer"], 
                 "contacts": form.add_customer_contacts.data,
