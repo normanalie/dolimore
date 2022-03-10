@@ -10,6 +10,7 @@ To start app:
 """
 
 import os
+import pymysql
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 

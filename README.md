@@ -2,7 +2,7 @@
 
 ```
 SECRET_KEY=secretKey
-DATABASE_URL=mysql+pymsql://dbuser:dbpassword@dbserver/dbname
+DATABASE_URL=mysql+pymysql://dbuser:dbpassword@dbserver/dbname
 DOLIBARR_API_KEY=apikey
 DOLIBARR_URL=http://example.com/dolibarr
 
