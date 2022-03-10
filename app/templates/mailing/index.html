@@ -56,10 +56,6 @@
 
             {{ form.categories_contact(class="form-control") }}
 
-            <div class="my-2">
-                <h4 class="text-muted">Départements</h4>
-                {{ form.departments_contact(class="form-control") }}
-            </div>
         </div>
     </div>
     <div class="pt-3 text-center row">
@@ -86,6 +82,5 @@
     document.multiselect('#categories_customer');
     document.multiselect('#departments_customer');
     document.multiselect('#categories_contact');
-    document.multiselect('#departments_contact');
 </script>
 {% endblock %}
