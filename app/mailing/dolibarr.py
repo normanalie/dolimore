@@ -99,7 +99,6 @@ class Dolibarr:
             if type == "customer" and "contacts" in filters:  # Add associated contacts for customers. Use temp_items to get only customers ids
                 if filters["contacts"]:
                     items.update(cls.get_contacts(customer_ids = items.keys()))
-        
         items = remove_val(items, None)
         return items
 
