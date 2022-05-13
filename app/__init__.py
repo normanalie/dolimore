@@ -18,9 +18,10 @@ def create_app():
     migrate.init_app(app, db)
     login.init_app(app)
     
-    from . import routes, mailing, models
+    from . import routes, mailing, contract, models
     app.register_blueprint(routes.bp)
     app.register_blueprint(mailing.bp, url_prefix="/mailing")
+    app.register_blueprint(contract.bp, url_prefix="/contract")
 
     from .admin_views import IndexView
     admin.init_app(app, index_view=IndexView())

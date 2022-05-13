@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app import db
-from app.forms import LoginForm, ContractForm, SignupForm
+from app.forms import LoginForm, SignupForm
 from app.models import User
 
 
@@ -14,14 +14,6 @@ bp = Blueprint('main', __name__, url_prefix="")
 @bp.route('/index/')
 def index():
     return render_template('index.html')
-
-
-@bp.route('/contract/', methods=['GET', 'POST'])
-@login_required
-def contract():
-    form = ContractForm()
-    tiers = ["mairie saint-denis", "salle des fetes"]
-    return render_template('contract.html', form=form, tiers=tiers)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
