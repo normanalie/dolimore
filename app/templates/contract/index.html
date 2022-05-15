@@ -11,4 +11,15 @@
         <h1>Générateur de contrat de cession</h1>
     </div>
 </div>
+
+<form action="." method="post">
+    {{ form.hidden_tag() }}
+    {% for item in form %}
+    <div>
+        {% if item.label.text != "CSRF Token" %}
+            {{ item.label }} : {{ item }}
+        {% endif %}
+    </div>
+    {% endfor %}
+</form>
 {% endblock %}

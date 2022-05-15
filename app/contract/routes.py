@@ -19,7 +19,7 @@ def index():
         return redirect(url_for('contract.upload'))
 
     if form.validate_on_submit():  # POST    
-        return render_template('contract.index.html')
+        return render_template('contract/index.html', form=form)
 
     return render_template('contract/index.html', form=form)
 
