@@ -1,3 +1,6 @@
+from datetime import datetime
+from os import path, remove
+
 from odf.opendocument import load
 from odf import text, draw, teletype, style, element
 from odf.element import Node
@@ -8,8 +11,32 @@ from odf.element import Node
 
 
 class Contract():
-    pass
+    @classmethod
+    def generate(cls, infile, datas_dic):
+        """
+        Generate a contract file from an input file (.odt).
+        Look for datas_dic.keys and replace them by datas_dic.value
+        Return the ouput file path
+        """
+        if not path.exists(infile):
+            return 1
 
+        doc = load(infile)
+        outfile = path.join(path.dirname(infile), f'contract-{datetime.now().strftime("%d-%m-%Y-%H-%M-%S")}.odt' )
+        for item in doc.getElementsByType(text.P):
+            for child in item.childNodes:
+                nodeReplaceText(child, datas_dic)
+                
+        doc.save(outfile)
+        return outfile
+
+    @classmethod
+    def delete(cls, file):
+        if path.exists(file):
+            remove(file)
+            return 0
+        else:
+            return 1
 
 def nodeReplaceText(node, dic, depth=1):
     if node and node.nodeType == Node.TEXT_NODE:
@@ -23,12 +50,3 @@ def nodeReplaceText(node, dic, depth=1):
         return 0
     return 0
 
-
-def generate(infile, dic, outfile):
-    doc = load(infile)
-    for item in doc.getElementsByType(text.P):
-        for child in item.childNodes:
-            nodeReplaceText(child, dic)
-            
-    doc.save(outfile)
-    return 0

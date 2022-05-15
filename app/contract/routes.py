@@ -3,6 +3,7 @@ from flask_login import login_required
 from wtforms import DateField
 
 from os import path
+from app import contract
 
 from app.contract import bp
 from app import db
@@ -16,7 +17,8 @@ from .contract import Contract
 @login_required
 def index():
     form = ContractForm()
-    if not path.exists(current_app.root_path+"\\static\\files\\contract\\contrat.odt"):  # No contract file
+    contract_path = current_app.root_path+"\\static\\files\\contract\\contract.odt"
+    if not path.exists(contract_path):  # No contract file
         return redirect(url_for('contract.upload'))
 
     if form.validate_on_submit():  # POST    
@@ -28,7 +30,8 @@ def index():
                         datas["#"+field.name] = field.data.strftime('%d/%m/%Y')
                     else: 
                         datas["#"+field.name] = str(field.data)
-            Contract.generate(datas)
+            file_path = Contract.generate(contract_path, datas)
+            print(file_path)
         return render_template('contract/index.html', form=form)
 
     return render_template('contract/index.html', form=form)
