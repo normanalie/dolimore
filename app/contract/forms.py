@@ -2,11 +2,13 @@ from flask_wtf import FlaskForm
 
 from datetime import date
 
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, regexp
+from flask_wtf.file import FileAllowed, FileRequired
 from wtforms import (
     StringField, TextAreaField,
     DateField,
-    DecimalField, 
+    DecimalField,
+    FileField,
     SubmitField, 
     )
 
@@ -25,3 +27,10 @@ class ContractForm(FlaskForm):
     price_letter = StringField('Prix lettres')
     contract_date = DateField('Date', format='%Y-%m-%d', default=date.today(), validators=[DataRequired()])
     submit = SubmitField("Générer")
+
+
+class UploadForm(FlaskForm):
+    file = FileField('Contrat', validators=[
+        DataRequired()
+        ]) 
+    submit = SubmitField('Envoyer')

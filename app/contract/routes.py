@@ -9,7 +9,7 @@ from app.contract import bp
 from app import db
 from app.models import User
 
-from .forms import ContractForm
+from .forms import ContractForm, UploadForm
 from .contract import Contract
 
 
@@ -40,7 +40,15 @@ def index():
 @bp.route('/upload/', methods=['GET', 'POST'])
 @login_required
 def upload():
-    return render_template('contract/upload.html')
+    form = UploadForm()
+    
+    print(form.errors)
+    print(form.validate())
+    if form.validate_on_submit():
+        f = request.files['file']
+        f.save(f"{current_app.root_path}\\static\\files\\contract\\contract.odt")
+        return redirect(url_for('contract.index'))
+    return render_template('contract/upload.html', form=form)
 
 @bp.route('/export/', methods=['GET', 'POST'])
 @login_required
