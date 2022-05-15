@@ -1,4 +1,4 @@
-from flask import current_app, redirect, render_template, request, url_for
+from flask import current_app, redirect, render_template, request, send_file, url_for
 from flask_login import login_required
 from wtforms import DateField
 
@@ -32,7 +32,7 @@ def index():
                         datas["#"+field.name] = str(field.data)
             file_path = Contract.generate(contract_path, datas)
             print(file_path)
-        return render_template('contract/index.html', form=form)
+        return send_file(file_path, as_attachment=True)
 
     return render_template('contract/index.html', form=form)
 
