@@ -1,5 +1,6 @@
 from flask import current_app, redirect, render_template, request, url_for
 from flask_login import login_required
+from wtforms import DateField
 
 from os import path
 
@@ -19,6 +20,15 @@ def index():
         return redirect(url_for('contract.upload'))
 
     if form.validate_on_submit():  # POST    
+        if form.submit.data:  # Submit button
+            datas = dict()
+            for field in form:
+                if field.name != "csrf_tocken" and field.name != "submit":
+                    if isinstance(field, DateField):
+                        datas["#"+field.name] = field.data.strftime('%d/%m/%Y')
+                    else: 
+                        datas["#"+field.name] = str(field.data)
+            Contract.generate(datas)
         return render_template('contract/index.html', form=form)
 
     return render_template('contract/index.html', form=form)
