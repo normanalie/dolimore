@@ -14,7 +14,17 @@
 
 <form action="." method="post" enctype = "multipart/form-data">
     {{ form.hidden_tag() }}
-    {{ form.file.label }} {{ form.file(accept=".odt") }}
-    {{ form.submit  }}
+
+    <div class="form-group row">
+        <div class="col form-control">
+            <h4 class="text-muted">{{ form.file.label }}</h4>
+            {{ form.file(accept=".odt", class="form-control") }}
+            <br>
+
+            <div class="text-center">
+                {{ form.submit(class="btn btn-success")  }}
+            </div>
+        </div>
+    </div>
 </form>
 {% endblock %}

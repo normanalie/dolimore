@@ -6,23 +6,35 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/multiselect.css') }}">
 <script src="{{ url_for('static', filename='js/tva.js') }}"></script>
 <script src="{{ url_for('static', filename='js/nombre_en_lettres.js') }}"></script>
-<div class="container mt-3">
+<div class="container mt-3" style="max-width: 900px;">
 <div class="row mb-3">
     <div class="col">
         <h1>Générateur de contrat de cession</h1>
     </div>
-</div>
+
 
 <form action="." method="post">
     {{ form.hidden_tag() }}
-    {% for item in form %}
-    <div>
-        {% if item.label.text != "CSRF Token" %}
-            {{ item.label }} : {{ item }}
-        {% endif %}
+    <div class="form-group row">
+        <div class="col form-control">
+            {% for item in form %}
+            {% if item.label.text != "CSRF Token" and item.id != "submit" %}
+                <h4 class="text-muted">{{ item.label }}</h4>
+                {{ item(class="form-control") }}
+                <br>
+            {% endif %}
+            {% endfor %}
+
+            <div class="text-center">
+                {{ form.submit(class="btn btn-success") }}
+                <a href="upload"><button type="button" class="btn btn-primary">Modifier le modèle</button></a>
+            </div>
+        </div>
     </div>
-    {% endfor %}
+    
 </form>
+
+</div>
 
 <script>
     rate = 0.055;
