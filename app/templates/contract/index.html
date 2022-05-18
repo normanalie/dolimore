@@ -4,7 +4,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/multiselect.css') }}">
-<script src="{{ url_for('static', filename='js/multiselect.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tva.js') }}"></script>
 <div class="container mt-3">
 <div class="row mb-3">
     <div class="col">
@@ -22,4 +22,22 @@
     </div>
     {% endfor %}
 </form>
+
+<script>
+    rate = 0.055;
+    
+    price_excl = document.getElementsByName('price_excl')[0];
+    taxes = document.getElementsByName('taxes')[0];
+    price_incl = document.getElementsByName('price_incl')[0];
+
+    price_excl.addEventListener('input', function(e){
+        taxes.value = calc_taxes(this.value, rate);
+        price_incl.value = calc_price_incl(this.value, rate);
+    });
+
+    price_incl.addEventListener('input', function(e){
+        price_excl.value = calc_price_excl(this.value, rate);
+        taxes.value = calc_taxes(price_excl.value, rate);
+    });
+</script>
 {% endblock %}
