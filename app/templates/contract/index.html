@@ -20,7 +20,7 @@
             {% for item in form %}
             {% if item.label.text != "CSRF Token" and item.id != "submit" %}
                 <h4 class="text-muted">{{ item.label }}</h4>
-                {{ item(class="form-control") }}
+                {{ item(class="form-control", placeholder='#'+item.name) }}
                 <br>
             {% endif %}
             {% endfor %}

@@ -14,6 +14,6 @@ MYSQL_USER=dbuser
 MYSQL_PASSWORD=dbpassword
 ```
 
-```docker run --name mysql --restart always -d -e --env-file .env mysql/mysql-server:latest```
+```docker run --name mysql --restart always -d --env-file .env mysql/mysql-server:latest```
 
-```docker run --name dolimore --restart always -d  -p 5000:5000 --rm --env-file .env -v /path/on/host:/home/dolimore/app/static/files --link mysql:dbserver dolimore:latest```
+```docker run --name dolimore --restart always -d  -p 5000:5000 --env-file .env -v /path/on/host:/home/dolimore/app/static/files --link mysql:dbserver dolimore:latest```
